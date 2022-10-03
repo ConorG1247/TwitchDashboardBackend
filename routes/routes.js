@@ -1,41 +1,29 @@
 const router = require("express").Router();
-const {
-  watchlistAddMovie,
-  getUserWatchlistData,
-  deleteWatchlistMovie,
-} = require("../models/models");
-const { movieData } = require("../schema/schema.js");
+const { blockList } = require("../schema/schema");
+const { addGameToBlockList } = require("../models/models");
 
-// get stored data of movies in watchlist
-router.get("/movie/:user", async (req, res) => {
-  const user = req.params.user;
-  const type = "movie"
-  const response = await getUserWatchlistData(type, user);
+// router.post("/create", async (req, res) => {
+// const data = await blockList
+// });
 
-  if (response.length !== 0) {
-      res.json({ success: true, payload: response });
-  }
+router.get("/get/all/:user", async (req, res) => {
+  const data = await blockList.find({ user: req.params.user });
+
+  res.json(data);
 });
 
-router.get("/anime/:user", async (req, res) => {
-  const user = req.params.user;
-  const type = "anime"
-  const response = await getUserWatchlistData(type, user);
-
-  if (response.length !== 0) {
-      res.json({ success: true, payload: response });
-  }
+router.post("/add/category", async (req, res) => {
+  const response = await addGameToBlockList(req.body);
+  res.json(response);
 });
 
-router.post("/update", async (req, res) => {
-  const data = await movieData.updateOne(
-    { user: req.body.user, type: req.body.type },
+router.post("/add/channel", async (req, res) => {
+  const data = await blockList.updateOne(
+    { user: req.body.user },
     {
       $push: {
-        data: {
-          title: req.body.title,
-          poster: req.body.poster,
-          year: req.body.year,
+        channels: {
+          name: req.body.name,
           id: req.body.id,
         },
       },
@@ -43,19 +31,6 @@ router.post("/update", async (req, res) => {
     { upsert: true }
   );
   res.json(data);
-});
-
-router.delete("/delete", async (req, res) => {
-  const data = await movieData.updateOne(
-    {
-      user: req.body.user,
-      type: req.body.type,
-      "data._id": req.body.id,
-    },
-    { $pull: { data: { _id: req.body.id } } }
-  );
-
-  res.json({success: true});
 });
 
 module.exports = router;

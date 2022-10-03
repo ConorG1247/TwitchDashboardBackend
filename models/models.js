@@ -1,38 +1,40 @@
-const { movieData } = require("../schema/schema.js")
+const { blockList } = require("../schema/schema");
 
-const getUserWatchlistData = async (type, user) => {
-    const data = movieData.find({ type: type, user: user
-      })
-    return data;
-}
+const addGameToBlockList = async (body) => {
+  const data = await blockList.updateOne(
+    { user: body.user },
+    {
+      $push: {
+        categories: {
+          name: body.name,
+          id: body.id,
+        },
+      },
+    },
+    { upsert: true }
+  );
 
-// model to take user and title given from frontend body 
-// saves this data in the DB to use later to show saved movies to watchlist
-const watchlistAddMovie = async (body) => {
-    const data = new movieData({
-        user: body.user,
-        title: body.title,
-        poster: body.poster,
-        year: body.year,
-        imdbID: body.imdbID,
-    })
-    
-    // adds data to the mongo database
-    const res = await data.save();
+  return data;
+};
 
-    return res;
-}
+const addChannelToBlockList = async (body) => {
+  const data = await blockList.updateOne(
+    { user: body.user },
+    {
+      $push: {
+        channels: {
+          name: body.name,
+          id: body.id,
+        },
+      },
+    },
+    { upsert: true }
+  );
 
-const deleteWatchlistMovie = async (id) => {
-  const data = movieData.findById({ _id: id });
+  return data;
+};
 
-  const res = await data.deleteOne();
-
-  return res;
-}
-
-  module.exports = {
-    watchlistAddMovie: watchlistAddMovie,
-    getUserWatchlistData: getUserWatchlistData,
-    deleteWatchlistMovie: deleteWatchlistMovie,
-  }
+module.exports = {
+  addGameToBlockList,
+  addChannelToBlockList,
+};
