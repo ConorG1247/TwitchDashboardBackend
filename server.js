@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const port = process.env.PORT ;
+const port = process.env.PORT;
 
 // cors middleware to allow connection for front/backend
 app.use(cors());
@@ -16,10 +16,10 @@ app.use(express.json());
 
 // connect to mongoDB
 mongoose
-  .connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/movie-api',{
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-  },)
+  })
   .then(() => console.log("mongoDB is connected"))
   .catch((err) => console.log(err));
 
