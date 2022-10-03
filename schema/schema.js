@@ -1,33 +1,12 @@
 const mongoose = require("mongoose");
 
-// folder schema for logged in users
-const movieArraySchema = new mongoose.Schema({
-  title: {
-    type: String,
-  },
-  poster: {
-    type: String,
-  },
-  year: {
-    type: Number,
-  },
-  id: {
-    type: String,
-  },
+const blockListSchema = new mongoose.Schema({
+  games: [{ name: String, id: String }],
+  channels: [{ name: String, id: String }],
 });
 
-const userMovieSchema = new mongoose.Schema({
-  user: {
-    type: String,
-  },
-  type: {
-    type: String,
-  },
-  data: [movieArraySchema]
-})
-
-const movieData = mongoose.model("movieData", userMovieSchema);
+const blockList = mongoose.model("blockList", blockListSchema);
 
 module.exports = {
-  movieData,
+  blockList,
 };
