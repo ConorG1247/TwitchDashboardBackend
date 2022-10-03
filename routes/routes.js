@@ -11,7 +11,16 @@ const {
 
 router.get("/get/all/:user", async (req, res) => {
   const data = await blockList.find({ user: req.params.user });
-  res.json();
+  if (data.length === 0) {
+    return res.json({
+      success: false,
+      message: `Couldn't find data for ${req.params.user}`,
+    });
+  }
+  return res.json({
+    user: data[0].user,
+    blocklist: { category: data[0].category, channel: data[0].channel },
+  });
 });
 
 // POST ROUTES //
