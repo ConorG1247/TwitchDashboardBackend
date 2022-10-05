@@ -17,6 +17,20 @@ const addGameToBlockList = async (body) => {
   return data;
 };
 
+const addLanguageToFilter = async (body) => {
+  const data = await blockList.updateOne(
+    { user: body.user },
+    {
+      $push: {
+        language: [body.language],
+      },
+    },
+    { upsert: true }
+  );
+
+  return data;
+};
+
 const addChannelToBlockList = async (body) => {
   const data = await blockList.updateOne(
     { user: body.user },
@@ -52,9 +66,20 @@ const deleteChannelFromBlockList = async (body) => {
   return data;
 };
 
+const deleteLanguageFromFilter = async (body) => {
+  const data = await blockList.updateOne(
+    { user: body.user },
+    { $pull: { language: body.language } }
+  );
+
+  return data;
+};
+
 module.exports = {
   addGameToBlockList,
   addChannelToBlockList,
+  addLanguageToFilter,
   deleteCategoryFromBlockList,
   deleteChannelFromBlockList,
+  deleteLanguageFromFilter,
 };
