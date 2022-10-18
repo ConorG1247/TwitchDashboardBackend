@@ -98,5 +98,5 @@ In the future I would like to revisit and add some of my initial goals including
 
 <img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png"/>
 
-[Backend Github repo](https://github.com/ConorG1247/TwitchDashboardBackend)
+[Frontend Github repo](https://github.com/ConorG1247/TwitchDashboard)
 
